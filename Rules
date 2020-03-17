@@ -1,0 +1,20 @@
+Creative random number:
+10^1 = 10
+10^2 = 100
+10^3 = 1000
+10^4 = 10000
+10^5 = 100000
+10^6 = 1000000
+
+The selection process:
+1) Generate random number (give static number for all sorting)
+2) Data setting
+    a) Random
+    b) Reversed
+    c) Few Unique
+        I) 20%
+        II) 50%
+        III) 90%
+3) Save in file
+4) Get the same number for all type sort
+
