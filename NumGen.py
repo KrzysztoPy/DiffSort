@@ -1,13 +1,16 @@
 import random
+import time
 
 
 class NumGen:
     num_of_test = 6
-    range = (10, 20)
-    # ,1000, 10000, 100000, 1000000
-    range_tests = [(0, range[0]), (0, range[1])]
-    # , (0, range[2]), (0, range[3]), (0, range[4]), (0, range[5])
+    range = [10, 100, 1000, 10000,100000]
+    # , 1000000
+    range_tests = [(0, range[0]), (0, range[1]), (0, range[2]), (0, range[3]),(0, range[4])]
+    # , (0, range[5])
     samples = []
+    sort_samples = []
+    time_and_result = []
 
     def get_interval(self):
         self.setting_tests(self.internal_or_external())
@@ -97,51 +100,89 @@ class NumGen:
             self.samples.append(tmp_table.copy())
             tmp_table.clear()
 
-        print("Star \n")
-        print(self.samples)
-        print(self.samples.__len__())
-        print("Stop \n")
-
+        # print("Star \n")
+        # print(self.samples)
+        # print(self.samples.__len__())
+        # print("Stop \n")
 
     def insertion(self):
-        # test_list = [1, 2, 1, 1, 2]
         sorted_list = []
         list_with_biggest = []
-        for unsort in self.samples:
 
-            if sorted_list.__len__() == 0:
-                sorted_list.append(unsort)
 
-            elif unsort > sorted_list[sorted_list.__len__() - 1]:
-                sorted_list.append(unsort)
+        for part_sample in self.samples:
+            start = time.time()
+            for unsort in part_sample:
 
-            elif unsort == sorted_list[sorted_list.__len__() - 1]:
-                sorted_list.append(unsort)
+                if sorted_list.__len__() == 0:
+                    sorted_list.append(unsort)
 
-            elif unsort < sorted_list[sorted_list.__len__() - 1]:
-                list_with_biggest.append(sorted_list[sorted_list.__len__() - 1])
-                sorted_list.pop()
+                elif unsort > sorted_list[sorted_list.__len__() - 1]:
+                    sorted_list.append(unsort)
 
-                for sort in range(sorted_list.__len__(), 0, -1):
-                    if sort > unsort:
-                        list_with_biggest.append(sorted_list[sorted_list.__len__() - 1])
-                        sorted_list.pop()
+                elif unsort == sorted_list[sorted_list.__len__() - 1]:
+                    sorted_list.append(unsort)
 
-                    elif sort == unsort:
+                elif unsort < sorted_list[sorted_list.__len__() - 1]:
+                    list_with_biggest.append(sorted_list[sorted_list.__len__() - 1])
+                    sorted_list.pop()
+
+                    if sorted_list.__len__() == 0:
                         sorted_list.append(unsort)
                         list_with_biggest.reverse()
                         sorted_list.extend(list_with_biggest.copy())
                         list_with_biggest.clear()
-                        break
-        print(sorted_list)
 
+                    else:
+                        for sort in sorted_list[::-1]:
+                            if sort > unsort:
+                                list_with_biggest.append(sort)
+                                sorted_list.pop()
+                                if sorted_list.__len__() == 0:
+                                    sorted_list.append(unsort)
+                                    list_with_biggest.reverse()
+                                    sorted_list.extend(list_with_biggest.copy())
+                                    list_with_biggest.clear()
+
+                            elif sort == unsort:
+                                sorted_list.append(unsort)
+                                list_with_biggest.reverse()
+                                sorted_list.extend(list_with_biggest.copy())
+                                list_with_biggest.clear()
+                                break
+
+                            elif sort < unsort:
+                                sorted_list.append(unsort)
+                                list_with_biggest.reverse()
+                                sorted_list.extend(list_with_biggest.copy())
+                                list_with_biggest.clear()
+                                break
+            stop = time.time()
+            print("Ending sorting {} samples: ".format(sorted_list.__len__()))
+
+            self.time_and_result.append(
+                ["Number of samples: {}".format(sorted_list.__len__()), "Time: {} s.".format(stop - start),
+                 sorted_list.copy()])
+            sorted_list.clear()
+
+        print("\n")
+        for i in self.time_and_result:
+            print(i)
+
+    def selection(self):
+        pass
+
+    def reverse(self):
+        self.range.reverse()
+        self.range_tests.reverse()
 
 def menu():
     num_gen = NumGen()
     # num_gen.setting_tests()
     # num_gen.sorting()
+    num_gen.reverse()
     num_gen.create_of_samples()
-    # num_gen.insertion()
+    num_gen.insertion()
 
 
 menu()
