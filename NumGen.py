@@ -99,25 +99,41 @@ class NumGen:
 
         print("Star \n")
         print(self.samples)
+        print(self.samples.__len__())
         print("Stop \n")
-        for o in self.samples:
-            print(o)
-            print(type(o))
-            continue
+
 
     def insertion(self):
-        copy_table = []
-        insertion_table = []
+        # test_list = [1, 2, 1, 1, 2]
+        sorted_list = []
+        list_with_biggest = []
+        for unsort in self.samples:
 
-        for i in self.samples:
-            copy_table.append(i)
-            for j in copy_table:
+            if sorted_list.__len__() == 0:
+                sorted_list.append(unsort)
 
-                if insertion_table.__len__() == 0:
-                    insertion_table.append(j)
-                else:
-                    tmp = insertion_table.__len__()
-                # pass directory
+            elif unsort > sorted_list[sorted_list.__len__() - 1]:
+                sorted_list.append(unsort)
+
+            elif unsort == sorted_list[sorted_list.__len__() - 1]:
+                sorted_list.append(unsort)
+
+            elif unsort < sorted_list[sorted_list.__len__() - 1]:
+                list_with_biggest.append(sorted_list[sorted_list.__len__() - 1])
+                sorted_list.pop()
+
+                for sort in range(sorted_list.__len__(), 0, -1):
+                    if sort > unsort:
+                        list_with_biggest.append(sorted_list[sorted_list.__len__() - 1])
+                        sorted_list.pop()
+
+                    elif sort == unsort:
+                        sorted_list.append(unsort)
+                        list_with_biggest.reverse()
+                        sorted_list.extend(list_with_biggest.copy())
+                        list_with_biggest.clear()
+                        break
+        print(sorted_list)
 
 
 def menu():
@@ -125,6 +141,7 @@ def menu():
     # num_gen.setting_tests()
     # num_gen.sorting()
     num_gen.create_of_samples()
+    # num_gen.insertion()
 
 
 menu()
