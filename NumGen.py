@@ -4,10 +4,10 @@ import time
 
 class NumGen:
     num_of_test = 6
-    range = [10, 100, 1000, 10000,100000]
-    # , 1000000
-    range_tests = [(0, range[0]), (0, range[1]), (0, range[2]), (0, range[3]),(0, range[4])]
-    # , (0, range[5])
+    range = [10, 20]
+    # , 1000, 10000, 100000, 1000000
+    range_tests = [(0, range[0]), (0, range[1])]
+    # , (0, range[2]), (0, range[3]), (0, range[4]) , (0, range[5])
     samples = []
     sort_samples = []
     time_and_result = []
@@ -23,7 +23,7 @@ class NumGen:
             answer = input("You want choice internal range? Y/N  ")
             if answer == "Y" or answer == "y" or answer == "N" or answer == "n":
                 if answer == "N" or answer == "n":
-                    self.range_test(answer)
+                    self.range_test()
                 else:
                     self.sorting()
                 break
@@ -46,7 +46,7 @@ class NumGen:
             except ValueError:
                 print("You must give a number! Try again. ")
 
-    def range_test(self, answer):
+    def range_test(self):
         while True:
             for i in range(1, self.number_tests() + 1):
                 try:
@@ -68,6 +68,10 @@ class NumGen:
                 except ValueError:
                     print("You must give a number! Try again. ")
             self.sorting()
+            # self.create_of_samples()
+            # self.selection()
+            break
+
 
     def sorting(self):
         while True:
@@ -108,7 +112,6 @@ class NumGen:
     def insertion(self):
         sorted_list = []
         list_with_biggest = []
-
 
         for part_sample in self.samples:
             start = time.time()
@@ -168,21 +171,67 @@ class NumGen:
         print("\n")
         for i in self.time_and_result:
             print(i)
+        print("\n\n\n")
+        # print(self.samples)
 
     def selection(self):
-        pass
+        tmp_tab = [[4, 2, 10, 0, 7, 3, 10, 7, 10, 1]]
+        self.samples = tmp_tab
+        tmp_smaller = None
+        the_same_smallest = None;
+        sorted_list = []
+        revers_sorted_list = []
+        tmp_sample_list = self.samples.copy()
 
-    def reverse(self):
-        self.range.reverse()
-        self.range_tests.reverse()
+        for separated_samples in tmp_sample_list:
+            for separated_list in range(0, separated_samples.__len__()):
+                for unsort in separated_samples:
+                    if tmp_smaller is None:
+                        tmp_smaller = unsort
+                        # tmp_sample_list.remove(unsort)
+                    else:
+                        if unsort < tmp_smaller:
+                            tmp_smaller = unsort
+                        elif unsort == tmp_smaller:
+                            the_same_smallest = unsort
+                            pass
+                # 1 bbb 0
+                if the_same_smallest is not None:
+                    sorted_list.append(tmp_smaller)
+                    the_same_smallest = None
+                    separated_samples.remove(tmp_smaller)
+                    tmp_smaller = None
+                else:
+                    sorted_list.append(tmp_smaller)
+                    separated_samples.remove(tmp_smaller)
+                    tmp_smaller = None
+                    tmp_smaller = None
+            for i in sorted_list:
+                print(i)
+
+
+
+def reverse(self):
+    self.range.reverse()
+    self.range_tests.reverse()
+
+
+# def tests(self):
+#     table = [0,1,1,2,1,3,3,1,1,5]
+#     print(table)
+#     table.remove(1)
+#     print(table)
+
 
 def menu():
     num_gen = NumGen()
     # num_gen.setting_tests()
     # num_gen.sorting()
-    num_gen.reverse()
-    num_gen.create_of_samples()
-    num_gen.insertion()
+    # num_gen.reverse()
+    # num_gen.create_of_samples()
+    # num_gen.insertion()
+    # num_gen.tests()
+    num_gen.selection()
 
 
 menu()
