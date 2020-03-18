@@ -1,4 +1,5 @@
 import random
+import sys
 import time
 
 
@@ -11,6 +12,9 @@ class NumGen:
     samples = []
     sort_samples = []
     time_and_result = []
+
+    # code sort name/ num elem / time / sorting elem
+    list_with_results = []
 
     def get_interval(self):
         self.setting_tests(self.internal_or_external())
@@ -46,32 +50,34 @@ class NumGen:
             except ValueError:
                 print("You must give a number! Try again. ")
 
+    # przepchnięcie pusteo od wywala błąd!!!
     def range_test(self):
         while True:
             for i in range(1, self.number_tests() + 1):
-                try:
-                    since = (int(input("Range test number {} from: ".format(i))))
-                except ValueError:
-                    print("You must give a number! Try again. ")
-                try:
+                while True:
                     while True:
-                        to = (int(input("Range test number {} from: ".format(i))))
-                        if to > since:
-                            self.range_tests.append((since, to))
+                        try:
+                            since = (int(input("Range test number {} from: ".format(i))))
                             break
-                        elif to == "":
-                            print("'to' can't be empty.")
-                        else:
-                            print(
-                                "Range 'from': {} can't be greater since 'to': {}. Try again.  ".format(since, to))
+                        except ValueError:
+                            print("You must give a number! Try again. ")
 
-                except ValueError:
-                    print("You must give a number! Try again. ")
+                    while True:
+                        try:
+                            to = (int(input("Range test number {} to: ".format(i))))
+                            break
+                        except ValueError:
+                            print("You must give a number! Try again. ")
+                    if to > since:
+                        self.range_tests.append((since, to))
+                        break
+                    elif to == "":
+                        print("'to' can't be empty.")
+                    else:
+                        print("Range 'from': {} can't be greater since 'to': {}. Try again.  ".format(since, to))
+
             self.sorting()
-            # self.create_of_samples()
-            # self.selection()
             break
-
 
     def sorting(self):
         while True:
@@ -83,18 +89,20 @@ class NumGen:
                     print("\nYou must choice number 1-8. Try again.\n")
                 else:
                     self.create_of_samples()
-                    pass
                     break
             except ValueError:
                 print("\nYou must choice number 1-8. Try again.\n")
-        # insertion()
-        # selection()
-        # bubble()
-        # shell()
-        # merge()
-        # heap()
-        # quick()
-        # quick3()
+
+        if choice_sort == 1:
+            self.insertion()
+        elif choice_sort == 2:
+            self.selection()
+        # self.bubble()
+        # self.shell()
+        # self.merge()
+        # self.heap()
+        # self.quick()
+        # self.quick3()
 
     def create_of_samples(self):
         tmp_table = []
@@ -103,11 +111,6 @@ class NumGen:
                 tmp_table.append(random.randint(t, i))
             self.samples.append(tmp_table.copy())
             tmp_table.clear()
-
-        # print("Star \n")
-        # print(self.samples)
-        # print(self.samples.__len__())
-        # print("Stop \n")
 
     def insertion(self):
         sorted_list = []
@@ -161,41 +164,29 @@ class NumGen:
                                 list_with_biggest.clear()
                                 break
             stop = time.time()
-            print("Ending sorting {} samples: ".format(sorted_list.__len__()))
-
-            self.time_and_result.append(
-                ["Number of samples: {}".format(sorted_list.__len__()), "Time: {} s.".format(stop - start),
-                 sorted_list.copy()])
+            data_after_sort = [sys._getframe().f_code.co_name, sorted_list.__len__(), stop - start, sorted_list.copy()]
+            self.list_with_results.append(data_after_sort.copy())
+            data_after_sort.clear()
             sorted_list.clear()
 
-        print("\n")
-        for i in self.time_and_result:
-            print(i)
-        print("\n\n\n")
-        # print(self.samples)
-
     def selection(self):
-        tmp_tab = [[4, 2, 10, 0, 7, 3, 10, 7, 10, 1]]
-        self.samples = tmp_tab
         tmp_smaller = None
-        the_same_smallest = None;
+        the_same_smallest = None
         sorted_list = []
-        revers_sorted_list = []
         tmp_sample_list = self.samples.copy()
 
         for separated_samples in tmp_sample_list:
+            start = time.time()
             for separated_list in range(0, separated_samples.__len__()):
                 for unsort in separated_samples:
                     if tmp_smaller is None:
                         tmp_smaller = unsort
-                        # tmp_sample_list.remove(unsort)
                     else:
                         if unsort < tmp_smaller:
                             tmp_smaller = unsort
                         elif unsort == tmp_smaller:
                             the_same_smallest = unsort
                             pass
-                # 1 bbb 0
                 if the_same_smallest is not None:
                     sorted_list.append(tmp_smaller)
                     the_same_smallest = None
@@ -205,10 +196,20 @@ class NumGen:
                     sorted_list.append(tmp_smaller)
                     separated_samples.remove(tmp_smaller)
                     tmp_smaller = None
-                    tmp_smaller = None
-            for i in sorted_list:
-                print(i)
+            stop = time.time()
+            data_after_sort = [sys._getframe().f_code.co_name, sorted_list.__len__(), stop - start, sorted_list.copy()]
+            self.list_with_results.append(data_after_sort.copy())
+            data_after_sort.clear()
 
+    def get_sort_data(self):
+
+        for general_data in self.list_with_results:
+            print(
+                "\n Sort type: {} \n Number elements: {} \n Sort time: {} \n Element sorts: {} ".format(general_data[0],
+                                                                                                        general_data[1],
+                                                                                                        general_data[2],
+                                                                                                        general_data[
+                                                                                                            3]))
 
 
 def reverse(self):
@@ -225,13 +226,15 @@ def reverse(self):
 
 def menu():
     num_gen = NumGen()
-    # num_gen.setting_tests()
+    num_gen.setting_tests()
+    # num_gen.create_of_samples()
     # num_gen.sorting()
     # num_gen.reverse()
-    # num_gen.create_of_samples()
+
     # num_gen.insertion()
     # num_gen.tests()
-    num_gen.selection()
+    # num_gen.selection()
+    num_gen.get_sort_data()
 
 
 menu()
