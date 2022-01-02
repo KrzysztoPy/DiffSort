@@ -1,3 +1,4 @@
+import math
 import random
 import sys
 import time
@@ -5,10 +6,10 @@ import time
 
 class NumGen:
     num_of_test = 6
-    range = [10, 20]
-    # , 1000, 10000, 100000, 1000000
-    range_tests = [(0, range[0]), (0, range[1])]
-    # , (0, range[2]), (0, range[3]), (0, range[4]) , (0, range[5])
+    range = [10, 20, 1000, 10000, 100000]
+    # ,100000 , 1000000
+    range_tests = [(0, range[0]), (0, range[1]), (0, range[2]), (0, range[3]), (0, range[4])]
+    #  , (0, range[5])
     samples = []
     sort_samples = []
     time_and_result = []
@@ -50,7 +51,6 @@ class NumGen:
             except ValueError:
                 print("You must give a number! Try again. ")
 
-    # przepchnięcie pusteo od wywala błąd!!!
     def range_test(self):
         while True:
             for i in range(1, self.number_tests() + 1):
@@ -97,7 +97,8 @@ class NumGen:
             self.insertion()
         elif choice_sort == 2:
             self.selection()
-        # self.bubble()
+        elif choice_sort == 3:
+            self.bubble()
         # self.shell()
         # self.merge()
         # self.heap()
@@ -176,6 +177,7 @@ class NumGen:
         tmp_sample_list = self.samples.copy()
 
         for separated_samples in tmp_sample_list:
+            print("Start sorting. Number of samples: {}".format(separated_samples.__len__))
             start = time.time()
             for separated_list in range(0, separated_samples.__len__()):
                 for unsort in separated_samples:
@@ -201,6 +203,42 @@ class NumGen:
             self.list_with_results.append(data_after_sort.copy())
             data_after_sort.clear()
 
+    def bubble(self):
+
+        # table = [0, 1, 1, 2, 1, 3, 3, 1, 1, 5]
+        # tmp_sample_list = table.copy()
+        tmp_sample_list = self.samples.copy()
+
+        check_revers = False
+        for separated_samples in tmp_sample_list:
+            print("Start sorting {} . Number of samples: {}".format(sys._getframe().f_code.co_name,
+                                                                    len(separated_samples)))
+            start = time.time()
+            while True:
+                for index in range(len(separated_samples)):
+                    if index != 0:
+                        if separated_samples[index] < separated_samples[index - 1]:
+                            tmp_bigger = separated_samples[index]
+                            separated_samples[index] = separated_samples[index - 1]
+                            separated_samples[index - 1] = tmp_bigger
+                            check_revers = True
+                if check_revers is False:
+                    break
+                else:
+                    check_revers = False
+            stop = time.time()
+
+            data_after_sort = [sys._getframe().f_code.co_name, separated_samples.__len__(), stop - start,
+                               separated_samples.copy()]
+            # separated_samples.clear()
+            self.list_with_results.append(data_after_sort.copy())
+
+    def shell(self):
+        table = [0, 1, 1, 2, 1, 3, 3, 1, 1, 5]
+
+        divi = math.floor(math.sqrt(table ^ (4 / 3)))
+        pass
+
     def get_sort_data(self):
 
         for general_data in self.list_with_results:
@@ -211,30 +249,31 @@ class NumGen:
                                                                                                         general_data[
                                                                                                             3]))
 
+    def tests(self):
+        table = [0, 1, 1, 2, 1, 3, 3, 1, 5, 1]
+        k = [n for n in table]
+        print(math.floor(math.pow(4, (4 / 3))))
+        print(math.floor(6.9999))
+        # print(table)
+
 
 def reverse(self):
     self.range.reverse()
     self.range_tests.reverse()
 
 
-# def tests(self):
-#     table = [0,1,1,2,1,3,3,1,1,5]
-#     print(table)
-#     table.remove(1)
-#     print(table)
-
-
 def menu():
     num_gen = NumGen()
-    num_gen.setting_tests()
+    # num_gen.setting_tests()
     # num_gen.create_of_samples()
     # num_gen.sorting()
     # num_gen.reverse()
 
     # num_gen.insertion()
-    # num_gen.tests()
+    num_gen.tests()
+    # num_gen.bubble()
     # num_gen.selection()
-    num_gen.get_sort_data()
+    # num_gen.get_sort_data()
 
 
 menu()
